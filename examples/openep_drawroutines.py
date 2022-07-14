@@ -16,19 +16,40 @@
 # You should have received a copy of the GNU General Public License along
 # with this program (LICENSE.txt).  If not, see <http://www.gnu.org/licenses/>
 
+from dataclasses import field
 import sys
 sys.path.append("..") 
 
 import openep
+import time
+import numpy as np
 
 
-filename = "./data/openep_dataset_2.mat"
+# filename = "./data/openep_dataset_2.mat"
+filename = "../openep/_datasets/OpenEP-MATLAB/openep_dataset_2.mat"
 case = openep.load_openep_mat(filename)
 mesh = case.create_mesh()
+print("mesh: ", mesh)
 
 # DrawVoltage Map
+# start_time = time.time()
 plotter = openep.draw.draw_map(
     mesh=mesh,
     field=case.fields.bipolar_voltage,
 )
-plotter.show()
+print("shape!!!!!!!!", np.shape(case.fields.bipolar_voltage))
+
+# plotter.show()
+plotter.show(interactive_update=True)
+# end_time = time.time()
+# print("time gap: ", end_time - start_time)
+
+# Animation
+for i in range(5, 1000):
+    # Updating our data
+    # Updating scalars
+    case.fields.bipolar_voltage += 0.01
+    plotter.update_scalars(mesh=mesh, scalars=case.fields.bipolar_voltage)
+    #p.mesh['data'] = data.flatten() # setting data to the specified mesh is also possible
+    # Redrawing
+    plotter.update()

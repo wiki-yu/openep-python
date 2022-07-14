@@ -2,7 +2,7 @@ cython
 attrs
 typing_extensions
 h5py
-numpy
+numpy==1.22
 numba
 scipy>=1.8
 scikit-image

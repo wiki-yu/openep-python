@@ -155,7 +155,9 @@ def draw_map(
         "name": "mesh",
         "opacity": 1.0,
     }
-
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    print("###field: ", field)
+    print("len: ", len(field))
     # combine the default and user-given kwargs
     default_add_mesh_kws = default_add_mesh_kws if add_mesh_kws is None else {**default_add_mesh_kws, **add_mesh_kws}
     default_add_mesh_kws["scalar_bar_args"] = default_scalar_bar_args

@@ -120,6 +120,15 @@ def load_openep_mat(filename, name=None):
         notes = np.asarray([data['notes']])[:, np.newaxis] if isinstance(data['notes'], str) else np.asarray(data['notes']).reshape(-1, 1)
     else:
         notes = np.asarray([""], dtype=str)[:, np.newaxis]
+    print("***************************")
+    print("name: ", name)
+    print("points: ", np.shape(points))
+    print("indices: ", np.shape(indices))
+    print("fields: ", fields)
+    # print("electric: ", electric)
+    print("ablation: ", ablation)
+    print("notes: ", notes)
+    print("***************************")
 
     return Case(name, points, indices, fields, electric, ablation, notes)
 
