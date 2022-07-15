@@ -23,6 +23,7 @@ sys.path.append("..")
 import openep
 import time
 import numpy as np
+import math
 
 
 # filename = "./data/openep_dataset_2.mat"
@@ -31,13 +32,23 @@ case = openep.load_openep_mat(filename)
 mesh = case.create_mesh()
 print("mesh: ", mesh)
 
+
+print("shape!!!!!!!!", np.shape(case.fields.bipolar_voltage))
+print("v1: ", case.fields.bipolar_voltage)
+voltage = [0 if math.isnan(x) else x for x in case.fields.bipolar_voltage]
+voltage = np.array(voltage)
+print("v2: ", voltage)
+print("max v: ", np.max(voltage))
+print("min v: ", np.min(voltage))
+
 # DrawVoltage Map
 # start_time = time.time()
 plotter = openep.draw.draw_map(
     mesh=mesh,
-    field=case.fields.bipolar_voltage,
+    # field=case.fields.bipolar_voltage,
+    field=voltage,
 )
-print("shape!!!!!!!!", np.shape(case.fields.bipolar_voltage))
+
 
 # plotter.show()
 plotter.show(interactive_update=True)
@@ -45,11 +56,14 @@ plotter.show(interactive_update=True)
 # print("time gap: ", end_time - start_time)
 
 # Animation
-for i in range(5, 1000):
+for i in range(5, 10000):
     # Updating our data
     # Updating scalars
-    case.fields.bipolar_voltage += 0.01
-    plotter.update_scalars(mesh=mesh, scalars=case.fields.bipolar_voltage)
+    # plotter.update_scalars(mesh=mesh, scalars=case.fields.bipolar_voltage)
+    # noise = np.random.rand(np.shape(voltage)[0], 1).flatten()
+    noise = np.random.uniform(low=-0.02, high=0.02, size=(np.shape(voltage)[0], 1)).flatten()
+    voltage += noise
+    plotter.update_scalars(mesh=mesh, scalars=voltage)
     #p.mesh['data'] = data.flatten() # setting data to the specified mesh is also possible
     # Redrawing
     plotter.update()

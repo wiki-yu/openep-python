@@ -31,12 +31,15 @@ mesh = case.create_mesh()
 
 # determine the window of interest for each point
 woi = openep.case.case_routines._get_window_of_interest(case)
+print("woi1: ", np.shape(woi))
 reference_time = openep.case.case_routines._get_reference_annotation(case)
+print("reference_time: ", np.shape(reference_time))
 woi += reference_time[:, np.newaxis]
+print("woi2: ", np.shape(woi))
 
 # Get mapping points within WOI
 mapping_points = openep.case.get_mapping_points_within_woi(case, indices=np.arange(10))
-
+print("mapping_points: ", mapping_points)
 # Get electrograms for specific points
 electrograms, names, local_activation_times = openep.case.get_electrograms_at_points(
     case,
@@ -46,9 +49,12 @@ electrograms, names, local_activation_times = openep.case.get_electrograms_at_po
     return_lat=True,
 )
 
+print("local_activation_times: ", local_activation_times)
+
 # Plot the electrogram traces
 # Array of times that are within the window of interest:
 times = openep.case.get_woi_times(case)
+print("times: ", times)
 fig, axis = openep.draw.plot_electrograms(
     times=times,
     electrograms=electrograms[:, times],  # only show the electrograms within the woi
@@ -63,7 +69,7 @@ plotter = openep.draw.draw_map(
     field=case.fields.bipolar_voltage,
 )
 plotter.background_color = "white"
-plotter.show()
+# plotter.show()
 
 # Interpolate bipolar voltage onto surface from raw electrograms
 interpolated_voltages = openep.case.interpolate_voltage_onto_surface(case, max_distance=15, bipolar=False)
@@ -73,4 +79,4 @@ plotter = openep.draw.draw_map(
     add_mesh_kws={"clim": (0, 5)}
 )
 plotter.background_color = "white"
-plotter.show()
+# plotter.show()
