@@ -28,5 +28,5 @@ print(f"Perimeter lengths: {free_boundaries.calculate_lengths()}")
 print(f"Cross-sectional areas: {free_boundaries.calculate_areas()}")
 
 plotter = openep.draw.draw_map(mesh)
-plotter = openep.draw.draw_free_boundaries(free_boundaries, plotter=plotter)
+# plotter = openep.draw.draw_free_boundaries(free_boundaries, plotter=plotter)
 plotter.show()

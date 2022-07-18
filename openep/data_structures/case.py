@@ -161,8 +161,17 @@ class Case:
         """
 
         indices = self.indices
+        # print("shape indices： ", np.shape(indices))
+        # print("indices： ", indices)
+        # temp = indices.flatten()
+        # temp.sort()
+        # print("temp: ", temp[:100])
         num_points_per_face = np.full(shape=(len(indices)), fill_value=3, dtype=int)  # all faces have three vertices
+        # print("num_points_per_face： ", np.shape(num_points_per_face))
+        # print("num_points_per_face： ", num_points_per_face)
         faces = np.concatenate([num_points_per_face[:, np.newaxis], indices], axis=1)
+        # print("faces: ", np.shape(faces))
+        # print("faces: ", faces)
 
         if back_faces:
             indices_inverted = indices[:, [0, 2, 1]]
@@ -171,7 +180,10 @@ class Case:
                 [faces, faces_inverted]
             )  # include each face twice for both surfaces
 
+        print("points shape: ", np.shape(self.points))
+        print("faces shape: ", np.shape(faces))
         mesh = pyvista.PolyData(self.points.copy(), faces.ravel())
+        # mesh = pyvista.PolyData(self.points.copy())
 
         return mesh
 
