@@ -145,9 +145,10 @@ def draw_map(
     default_add_mesh_kws = {
         "style": "surface",
         "show_edges": False,
-        "smooth_shading": True,
+        # "smooth_shading": True,
         "annotations": False,
         "cmap": matplotlib.cm.jet_r,
+        # "cmap": ['green', 'red'],
         "clim": (0, 2),
         "above_color": "magenta",
         "below_color": "brown",
@@ -162,7 +163,7 @@ def draw_map(
 
     plotter.add_mesh(
         mesh=mesh,
-        # scalars=field,
+        scalars=field,
         **default_add_mesh_kws,
     )
 
@@ -171,6 +172,8 @@ def draw_map(
             get_free_boundaries(mesh),
             plotter=plotter
         )
+
+    # plotter.smooth()  # xuyong
 
     return plotter
 

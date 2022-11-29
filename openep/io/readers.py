@@ -78,10 +78,12 @@ def _check_mat_version_73(filename):
 
 def _load_mat(filename):
     """Load a MATLAB file."""
-
+    
     if _check_mat_version_73(filename):
+        print("111111111111111111111111111111111")
         data = _load_mat_v73(filename)
     else:
+        print("22222222222222222222222222222")
         data = _load_mat_below_v73(filename)
 
     # These are indices

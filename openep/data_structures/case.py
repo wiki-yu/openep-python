@@ -79,6 +79,7 @@ from typing import Optional, Tuple, List
 
 import numpy as np
 import pyvista
+import json
 
 from .surface import Fields
 from .electric import Electric, Electrogram, Annotations, ECG
@@ -160,18 +161,9 @@ class Case:
             mesh (pyvista.Polydata): a mesh created from the case's points and indices
         """
 
-        indices = self.indices
-        # print("shape indices： ", np.shape(indices))
-        # print("indices： ", indices)
-        # temp = indices.flatten()
-        # temp.sort()
-        # print("temp: ", temp[:100])
+        indices = self.indices  # (16942, 3) faces with vertices index
         num_points_per_face = np.full(shape=(len(indices)), fill_value=3, dtype=int)  # all faces have three vertices
-        # print("num_points_per_face： ", np.shape(num_points_per_face))
-        # print("num_points_per_face： ", num_points_per_face)
-        faces = np.concatenate([num_points_per_face[:, np.newaxis], indices], axis=1)
-        # print("faces: ", np.shape(faces))
-        # print("faces: ", faces)
+        faces = np.concatenate([num_points_per_face[:, np.newaxis], indices], axis=1)  # faces with number of vertices
 
         if back_faces:
             indices_inverted = indices[:, [0, 2, 1]]
@@ -180,11 +172,31 @@ class Case:
                 [faces, faces_inverted]
             )  # include each face twice for both surfaces
 
-        print("points shape: ", np.shape(self.points))
-        print("faces shape: ", np.shape(faces))
-        mesh = pyvista.PolyData(self.points.copy(), faces.ravel())
-        # mesh = pyvista.PolyData(self.points.copy())
+        f_points= open("../test_surface_mesh.json", "r")
+        data = json.loads(f_points.read())
+        arr_points = np.array(data["vertices"])
 
+    
+        f_meshes= open("../test_surface_mesh.json", "r")
+        data = json.loads(f_meshes.read())
+        arr_meshes = np.array(data["faces"])
+        arr_meshes_new = np.insert(arr_meshes, 0, 3, axis = 1)
+
+        pointstest = arr_points
+        facestest = arr_meshes_new
+        print("np.shape vertices: ", np.shape(pointstest))
+
+        # pointstest = self.points  # (14383, 3) vertices
+        # facestest = faces  # (16942, 4) faces with number of index
+
+        # pointstest = np.array([[0, 0, 0], [1, 0, 0], [1, 0.5, 0], [0, 0.5, 0]])
+        # facestest = np.hstack([[3, 0, 1, 2], [3, 0, 3, 2]])
+        # facestest = np.array([[3, 0, 1, 2], [3, 0, 3, 2]])
+                
+
+        # mesh = pyvista.PolyData(self.points.copy(), faces.ravel())
+        mesh = pyvista.PolyData(pointstest, facestest.ravel())
+        # mesh = pyvista.PolyData(self.points.copy())
         return mesh
 
     def get_surface_data(self, copy: bool = False) -> Tuple[np.ndarray, np.ndarray]:
